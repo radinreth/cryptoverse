@@ -13,7 +13,8 @@ import {
   CheckOutlined,
   StopOutlined,
   ExclamationCircleOutlined } from '@ant-design/icons/lib/icons'
-import { useGetCryptoDetailsQuery } from '../services/cryptoApi'
+import { useGetCryptoDetailsQuery, useGetCryptoHistoryQuery } from '../services/cryptoApi'
+import LineChart from './LineChart'
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -25,6 +26,8 @@ const CryptoDetails = () => {
 
   const { data, isFetching } = useGetCryptoDetailsQuery({coinUuid, timePeriod})
   const cryptoDetails = data?.data?.coin;
+
+  const { data: coinHistory } = useGetCryptoHistoryQuery({coinUuid, timePeriod})
   
   const time = ['24h', '7d', '30d'];
 
@@ -46,7 +49,7 @@ const CryptoDetails = () => {
     { title: 'Circulating Supply', value: `$ ${millify(cryptoDetails.supply.circulating)}`, icon: <ExclamationCircleOutlined /> },
   ];
 
-  console.log(cryptoDetails)
+  console.log(coinHistory)
   return (
     <Col className="coin-detail-container">
       <Col className="coin-heading-container">
@@ -71,7 +74,13 @@ const CryptoDetails = () => {
           time.map(t => <Option key={t} value={t}>{t}</Option>)
         }
       </Select>
-      {timePeriod}
+      
+      <LineChart
+        coinHistory={coinHistory}
+        currentPrice={ millify(cryptoDetails.price) }
+        coinName={cryptoDetails.name}
+      />
+
       <Col className='stats-container'>
         <Col className='coin-value-statistics'>
           <Col className='coin-value-statistics-heading'>
