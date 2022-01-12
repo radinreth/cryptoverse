@@ -22,9 +22,12 @@ const Cryptocurrencies = ({ simplified }) => {
 
   return (
     <>
-      <div className='search-crypto'>
-        <Input placeholder='Search cryptocurrency' onChange={(e) => setSearchTerm(e.target.value)}/>
-      </div>
+      {
+        !simplified &&
+        <div className='search-crypto'>
+          <Input placeholder='Search cryptocurrency' onChange={(e) => setSearchTerm(e.target.value)}/>
+        </div>
+      }
 
       <p>
         <strong>{cryptos.length}</strong> result(s) found from <strong>{searchTerm}</strong> keywords
